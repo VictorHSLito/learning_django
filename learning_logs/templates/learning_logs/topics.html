@@ -6,8 +6,14 @@
     </p>
 
     <ul>
-        {% for topic in topics %}
-        <li>{{ topic }}</li>
+        {% for topic in topics %}  <!-- Não aceita o enumerate, exite outro tipo de contador para isso -->
+
+        <li> {{ forloop.counter}} -
+            <a href="{% url 'learning_logs:topic' topic.id %}">
+                {{ topic }}
+            </a>
+        </li>
+
         {% empty %}
         <li>No topics have been added yet</li>
         {% endfor %}
