@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -11,14 +12,16 @@ def index(request):
     return render(request, 'learning_logs/index.html')
 
 
+@login_required
 def topics(request):
     """Função para criar a view de todos os assuntos"""
-    topics = Topic.objects.order_by('date_added')
+    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
     context = {'topics': topics}
 
     return render(request, 'learning_logs/topics.html', context)
 
 
+@login_required
 def topic(request, topic_id):
     """Função para criar a view sobre um assuto em específico"""
     topic = Topic.objects.get(id=topic_id)
@@ -28,6 +31,7 @@ def topic(request, topic_id):
     return render(request, 'learning_logs/topic.html', context)
 
 
+@login_required
 def new_topic(request):
     """Função para criar a view para adicionar um novo assunto"""
     if request.method != 'POST':  # Se nenhum dado foi enviado, cria um formulário em branco
@@ -36,12 +40,14 @@ def new_topic(request):
         form = TopicForm(request.POST)
         if form.is_valid():  # Verifica se todas as informações contidas no formulário são válidas
             form.save()  # Salva os dados do formulário no banco de dados
-            return HttpResponseRedirect(reverse('learning_logs:topics'))  # Redireciona o usuário para a página de topics
+            return HttpResponseRedirect(
+                reverse('learning_logs:topics'))  # Redireciona o usuário para a página de topics
 
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
 
 
+@login_required
 def new_entry(request, topic_id):
     """Função para criar a view para adicionar uma nova entrada"""
     topic = Topic.objects.get(id=topic_id)
@@ -60,6 +66,7 @@ def new_entry(request, topic_id):
     return render(request, 'learning_logs/new_entry.html', context)
 
 
+@login_required
 def edit_entry(request, entry_id):
     """Função para criar a view para editar uma entrada existente"""
     entry = Entry.objects.get(id=entry_id)
