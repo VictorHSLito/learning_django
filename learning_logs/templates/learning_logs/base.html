@@ -32,10 +32,19 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                 <li><a>Hello, {{ user.username }}.</a></li>
-                <li><a href="{% url 'users:logout' %}">Log out</a></li>
-                {% else %}
-                <li><a href="{% url 'users:register' %}">Register</a>
+                <li>
+                    <form method="post" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" style="position: relative; display: block; padding: 15px;
+                        color: #777; text-decoration: none; background-color: transparent; border: none;
+                        cursor: pointer; font: inherit;"
+                        onmouseover="this.style.color='#333';"
+                        onmouseout="this.style.color='#777';">Log out
+                        </button>
+                    </form>
                 </li>
+                {% else %}
+                <li><a href="{% url 'users:register' %}">Register</a></li>
                 <li><a href="{% url 'users:login' %}">Log in</a></li>
                 {% endif %}
             </ul>

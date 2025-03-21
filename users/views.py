@@ -6,7 +6,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.http import require_POST
 
 
-@require_POST
 def logout_view(request):
     """Faz o logout do usuário"""
     logout(request)
